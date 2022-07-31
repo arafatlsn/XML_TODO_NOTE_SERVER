@@ -29,7 +29,6 @@ async function run() {
     // add new note 
     app.post('/addNote', async(req, res) => {
       const addNote = req.body;
-      console.log(addNote)
       const result = await notes.insertOne(addNote);
       res.send(result)
     })
@@ -37,13 +36,13 @@ async function run() {
     // added or update new note 
     app.put('/updateNote', async(req, res) => {
       const noteDoc = req.body;
-      const title = req.body.title;
-      const findNote = await notes.findOne({title});
+      const id = req.query.id;
+      const findNote = await notes.findOne({_id: ObjectId(id)});
       const updateDoc = {
         $set: noteDoc
       }
       const result = await notes.updateOne(findNote, updateDoc);
-      console.log(findNote)
+      console.log(result)
       res.send(result)
     })
     
