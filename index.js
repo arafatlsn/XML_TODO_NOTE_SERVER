@@ -33,15 +33,23 @@ async function run() {
       res.send(result)
     })
 
-    // added or update new note 
+    // delete note 
+    app.get('/removeNote', async(req, res) => {
+      const id = req.query.id;
+      const result = await notes.deleteOne({_id: ObjectId(id)})
+      res.send(result)
+    })
+
+    // update new note 
     app.put('/updateNote', async(req, res) => {
       const noteDoc = req.body;
       const id = req.query.id;
       const findNote = await notes.findOne({_id: ObjectId(id)});
+      const options = { upsert: true }
       const updateDoc = {
         $set: noteDoc
       }
-      const result = await notes.updateOne(findNote, updateDoc);
+      const result = await notes.updateOne(findNote, updateDoc, options);
       console.log(result)
       res.send(result)
     })
